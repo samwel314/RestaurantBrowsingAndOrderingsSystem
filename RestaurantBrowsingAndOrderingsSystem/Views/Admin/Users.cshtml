@@ -1,0 +1,91 @@
+﻿@model List<ManageUsersViewModel>
+@{
+    ViewData["Title"] = $"Show All {Model.Count} Users";//----1005415303
+}
+<div class="mt-3">
+    <p class="card-text fw-bold fs-4"> <a asp-page="/UpdateCreate" class="btn btn-outline-secondary w-50 fw-bold fs-5">Create New One  <i class="bi bi-house-add-fill"></i> </a></p>
+</div>
+<table class="table table-bordered border-primary mt-3 ">
+    <thead class="table-light ">
+        <tr class="text-center fs-4 fw-bold fst-italic">
+            <th >Full Name </th>
+            <th >Email </th>
+            <th > Phone </th>
+            <th >Created In </th>
+            <th > Last Seen </th>
+            <th>Role </th>
+            <th> Lock & UnLock </th>
+
+             <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody class="table-dark text-bg-light fst-italic fs-6 fw-bold text-center">
+      
+        @foreach (var data in Model)
+        {
+            <tr>
+             
+                <td>@data.UserName</td>
+                <td>@data.UserEmail</td>
+                <td>@data.UserPhone</td>
+                <td>
+                    Before @(data.CreatedAt.Days > 0 ? $"{data.CreatedAt.Days.ToString()} Days and" : "")
+                    @(data.CreatedAt.Hours > 0 ? $"{data.CreatedAt.Hours.ToString()} Hours and" : "")
+                    @(data.CreatedAt.Minutes > 0 ? $"{data.CreatedAt.Minutes.ToString()} Minutes" : "")
+                </td>
+                <td>
+                    Before @(data.LastSeen.Days > 0 ? $"{data.LastSeen.Days.ToString()} Days and" : "")
+                    @(data.LastSeen.Hours > 0 ? $"{data.LastSeen.Hours.ToString()} Hours and" : "")
+                    @(data.LastSeen.Minutes > 0 ? $"{data.LastSeen.Minutes.ToString()} Minutes" : "")
+
+                </td>
+                <td>@data.Role</td>
+                <td>
+                    <button @(data.Role == "Admin" ? "disabled" : "") id="@data.Id" data-Id="@data.Id" data-lock="@(data.ISLocked ? 1 : 0)" class='clock btn @(data.ISLocked == true ? "btn-success" : "btn-warning")   fs-5  fw-bold'><i class=' @(data.ISLocked == true ? "bi bi-unlock" : "bi bi-lock-fill")'></i> @(data.ISLocked == true ? " UnLock" : " Lock")</button>
+                </td>
+                <td>
+                    <button @(data.Role == "Admin" ? "disabled" : "") data-Id="@data.Id" class="btn btn-danger fs-5 fw-bold js-delete"><i class="bi bi-trash-fill"></i> Delete</button>
+                </td>
+            </tr>
+         }
+    </tbody>
+</table>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('.clock').on('click', function () {
+            var a = $(this);
+            var Id = a.data('id');
+            var lockvalue = a.data('lock');   // 1 
+            if (lockvalue == 1)
+                lockvalue = 0;
+            else 
+               lockvalue = 1 ;
+
+            a.data('lock', lockvalue) ; 
+
+
+            $.ajax({
+                url: '/Admin/LockUnLock/' + Id,
+                type: 'POST',
+                success: function () {
+                    //"bi bi-unlock" : "bi bi-lock-fill"
+                    if (lockvalue == 1 )
+                    {
+                        $('#' + Id).empty().html('<i  class="bi bi-unlock"></i> UnLock');;
+                        $('#' + Id).removeClass('btn-warning').addClass('btn-success');                   
+                    }
+                    else{
+                        $('#' + Id).empty().html('<i class="bi bi-lock-fill"></i> Lock');
+                        $('#' + Id).removeClass('btn-success').addClass('btn-warning');           
+                    }
+
+                }
+            });
+        });
+    });
+
+    
+
+</script>

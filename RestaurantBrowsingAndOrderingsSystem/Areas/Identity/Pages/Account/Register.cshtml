@@ -1,0 +1,75 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="card mt-4 mx-auto" style="max-width: 700px;">
+    <h3 class="card-title text-center text-white mt-2 fw-bold">Create New Account</h3>
+    <div class="card-body">
+        <div class="fw-bold text-warning" asp-validation-summary="All"></div>
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+            <div class="mb-3">
+                <label class="text-white fw-bold" asp-for="Input.Email"></label>
+
+                <input asp-for="Input.Email" class="form-control" autocomplete="tel" aria-required="true" placeholder="Email" />
+                <span asp-validation-for="Input.Email" class="fw-bold text-warning"></span>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="text-white fw-bold" asp-for="Input.FullName">Full Name</label>
+
+                        <input asp-for="Input.FullName" class="form-control" autocomplete="name" aria-required="true" placeholder="Full Name" />
+                        <span asp-validation-for="Input.FullName" class="fw-bold text-warning"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="text-white fw-bold" asp-for="Input.PhoneNumber"></label>
+
+                        <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="tel" aria-required="true" placeholder="Phone Number" />
+                        <span asp-validation-for="Input.PhoneNumber" class="fw-bold text-warning"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="text-white fw-bold" asp-for="Input.Password"></label>
+
+                        <input asp-for="Input.Password" type="password" class="form-control" autocomplete="tel" aria-required="true" placeholder="Password" />
+                        <span asp-validation-for="Input.Password" class="fw-bold text-warning"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="text-white fw-bold" asp-for="Input.ConfirmPassword"></label>
+
+                        <input asp-for="Input.ConfirmPassword" type="password" class="form-control" autocomplete="tel" aria-required="true" placeholder="Confirm Password" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="fw-bold text-warning"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-outline-primary btn-lg w-100">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

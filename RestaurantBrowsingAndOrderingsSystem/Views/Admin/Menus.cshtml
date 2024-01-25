@@ -1,0 +1,102 @@
+﻿@model Restaurant 
+@{
+	ViewData["Title"] = $"View Menus For  {Model.Name} Restaurant";
+}
+
+
+<div class="container mt-2">
+    <div class="row text-center text-bg-dark text-white fs-3 fst-italic fw-bold">
+        <div class="col">
+            <p><i class="bi bi-house"></i> @Model.Name Restaurant</p>
+            <p><i class="bi bi-geo-alt"></i> @Model.Location</p>
+        </div>
+    </div>
+
+    <div class="row text-bg-dark text-center">
+        <div class="col-12 col-md-6">
+            <a asp-controller="Menu" asp-action="UpdateCreate" asp-route-id="@Model.Id" class="btn btn-outline-success text-white fs-3 fst-italic fw-bold w-100 offset-6"><i class="bi bi-cloud-plus"></i> Create New Menu </a>
+        </div>
+        <div class="col-12 col-md-6">
+            <a asp-controller="Admin" asp-action="Restaurants" class="btn btn-outline-primary text-white fs-4 fst-italic fw-bold w-25 offset-8 mt-2 mt-md-0"><i class="bi bi-skip-backward-circle"></i> Back </a>
+        </div>
+    </div>
+    <hr />
+    @if (Model.Menus!.Count() == 0)
+    {
+        <div class="text-center mt-1 text-bg-dark text-warning fs-3 fst-italic fw-bold alert alert-secondary" role="alert">
+            <h4 class="alert-heading"><i class="bi bi-exclamation-circle-fill"></i></h4>
+            <p>No Menus Added For This Restaurant</p>
+            <hr>
+        </div>
+    }
+    else
+    {
+      
+        <div class="mt-2 row row-cols-1 row-cols-md-2 row-cols-lg-3">
+            @foreach (var menu in Model.Menus!)
+            {
+                <div class="col mb-4 w-50" id="d@(menu.Id)">
+                    <div class="card border-3 border-primary text-white fs-3 fst-italic fw-bold">
+                        <div class="card-header border-primary text-bg-dark  border-3">
+                            <h1>
+                                <i class="bi bi-arrow-right-circle-fill"></i> @menu.Type Menu 
+                            </h1>
+                            <a asp-controller="Meal" asp-action="UpdateCreate" asp-route-id="@menu.Id"  class="btn btn-success fs-5 w-50 fw-bold"> <i class="bi bi-patch-plus-fill"></i> Add Meal  </a>
+                        </div>
+                        <div class="card-body ">
+                            <p class="card-text fs-4"> @menu.Description</p>
+                            <p>
+                                <button class="btn btn-primary  fs-5 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="@($"#collapseWidthExample{menu.Id}")" aria-expanded="false" aria-controls="collapseWidthExample">
+                                    <i class="bi bi-cup-hot"></i> Show Meals
+                                </button>
+                                <a asp-controller="Menu" asp-action="UpdateCreate" asp-route-id="@menu.RestaurantId" asp-route-menuId="@menu.Id" class="btn btn-secondary w-25 fs-6 offset-1 fw-bold"><i class="bi bi-pencil-square"></i> Update </a>
+                                <a  data-Id="@menu.Id" class="btn btn-danger w-25 fs-6 fw-bold del-menu"><i class="bi bi-trash3"></i> Delete </a>
+
+                            </p>
+                            <div style="min-height: 120px;">
+                                <div class="collapse collapse-horizontal" id="@($"collapseWidthExample{menu.Id}")">
+                                    <div class="card card-body" style="width: 500px;">
+                                        <table class="table table-dark table-hover fs-6 table-bordered">
+                                            <tr class="table-primary">
+                                                <th > <i class="bi bi-file-image"></i> Image </th>
+                                                <th ><i class="bi bi-card-heading"></i> Meal Name  </th>
+                                                <th ><i class="bi bi-cart-check"></i> Price  </th>
+                                                <th ><i class="bi bi-gift-fill"></i> Offer  </th>
+                                                <th>Edit<i class="bi bi-gear"></i>
+                                                <th>Remove<i class="bi bi-gear"></i>
+                                            </tr>
+                                          
+                                            @foreach (var meal in menu.Meals)
+                                            {
+                                                <tr id="tr@(meal.Id)">
+                                                    <td><img src="~/Restaurant_@Model.Id/@meal.ImageUrl" width="70px"  height="40px"/> </td> <!--Sooon-->
+
+                                                    <td>@meal.Name </td>
+                                                    <td>@meal.Price.ToString("c") </td>
+                                                    <td>@(meal.Offer != null ? @meal.Offer.Value.ToString("c") : Html.Raw("<i class='bi bi-unlock-fill'></i>"))  </td>
+                                                    <td>
+                                                        <a class="btn btn-secondary" asp-controller="Meal" asp-action="UpdateCreate" asp-route-id="@menu.Id" asp-route-mealId="@meal.Id"><i class="bi bi-pencil-square"></i> </a>
+                                                       
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-danger del-meal"  data-Id="@meal.Id" ><i class="bi bi-trash3"></i> </a>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                 
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/sweetalert/sweetalert.min.js"></script>
+<script src="~/js/menu.js" asp-append-version="true"></script>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Restaurant>
+@{
+	ViewData["Title"] = $"Show All {Model.Count()} Restaurants";
+}
+<div class="mt-3">
+    <p class="card-text fw-bold fs-4"> <a asp-action="UpdateCreate" class="btn btn-outline-secondary w-50 fw-bold fs-5">Create New One  <i class="bi bi-house-add-fill"></i> </a></p>
+</div>
+<table class="table table-bordered border-primary mt-3 " >
+    <thead class="table-light ">
+        <tr class="text-center fs-4 fw-bold fst-italic">
+            <th scope="col"><i class="bi bi-list-ol"></i></th>
+            <th scope="col"><i class="bi bi-person-badge-fill"></i> Restaurant Name </th>
+            <th scope="col"><i class="bi bi-geo-alt-fill"></i> Location </th>
+            <th scope="col"><i class="bi bi-alarm"></i> Added in </th>
+            <th scope="col"><i class="bi bi-gear"></i> Actions  </th>
+        </tr>
+    </thead>
+    <tbody class="table-dark text-bg-light fst-italic fs-4 fw-bold text-center">
+        @{
+            int Count = 1; 
+        }
+        @foreach (var data in Model)
+        {
+            <tr id="tr@(data.Id)">
+                <th scope="row">@(Count++)</th>
+                <td>@data.Name</td>
+                <td>@data.Location</td>
+                <td>@data.CreatedAt!.Value.ToString("yyyy-MM-dd")</td>
+                <td>
+
+                    <a asp-action="Menus" asp-route-Id="@data.Id" class="btn btn-success  fs-5  fw-bold"><i class="bi bi-basket2-fill"></i> Manage Menus </a>
+                    <a asp-action="UpdateCreate" asp-route-Id="@data.Id" class="btn btn-info  fs-5  fw-bold"><i class="bi bi-pen"></i> Update</a>
+                    <a  data-Id="@data.Id" class="btn btn-danger fs-5 fw-bold js-delete"><i class="bi bi-trash-fill"></i> Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!-- Your HTML content -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/sweetalert/sweetalert.min.js"></script>
+
+<script src="~/js/restaurant.js" asp-append-version="true"></script>

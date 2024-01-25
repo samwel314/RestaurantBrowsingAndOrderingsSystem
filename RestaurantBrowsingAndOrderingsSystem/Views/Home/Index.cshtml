@@ -1,0 +1,104 @@
+﻿@model HomeOverview
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<nav aria-label="..." class="mt-2 p-2">
+    <ul class="pagination fw-bold ">
+        @if (Model.Pagination.Active <=0) 
+        {
+            <li class="page-item disabled ">
+            <a class="page-link">Previous</a>
+          </li>
+        }
+        else
+        {
+            <li class="page-item ">
+                <a class="page-link" asp-action="Index" asp-route-Active="@(Model.Pagination.Active-1)">Previous</a>
+            </li>
+        }
+
+        @for (int i = 0 ; i < Model.Pagination.PagesCount; i ++)
+        {
+            if (i == Model.Pagination.Active)
+            {
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" asp-action="Index" asp-route-Active="@i">@(i+1)</a>
+                </li>
+
+            }
+            else
+            {
+                <a class="page-link" asp-action="Index" asp-route-Active="@i">@(i + 1)</a>
+            }
+         }
+        <li class="page-item">
+            <a class="page-link" asp-action="Index" asp-route-Active="@(Model.Pagination.Active+1)">Next </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="mt-5 row row-cols-1 row-cols-md-2 row-cols-lg-3 ">
+    @foreach (var restaurant in Model.Restaurants!)
+    {
+       <div class="col mb-4 w-50 mt-3" >
+            <div class="card border-3 border-primary text-white fs-3 fst-italic fw-bold">
+
+                <div class="card-header border-primary text-bg-dark  border-3">
+                    <h1>
+                        <i class="bi bi-house"></i>
+                        @restaurant.Name
+                    </h1>
+                    <p class="text-center"><i class="bi bi-geo-alt-fill"></i> @restaurant.Location</p>
+                </div>
+                @foreach (var menu in restaurant.Menus)
+                {
+                    <div class="card-body ">
+                        <p>
+                            <button class="btn btn-primary  fs-5 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="@($"#collapseWidthExample{menu.Id}")" aria-expanded="false" aria-controls="collapseWidthExample">
+                                <i class="bi bi-cup-hot"></i>@menu.Type Menu
+                            </button>
+                        </p>
+                        <div style="min-height: 60px;">
+                            <div class="collapse collapse-horizontal" id="@($"collapseWidthExample{menu.Id}")">
+                                <div class="card card-body" style="width: 600px;">
+                                    <table class="table table-dark table-hover fs-6 table-bordered">
+                                        <tr class="table-primary">
+                                            <th> <i class="bi bi-file-image"></i> Image </th>
+                                            <th><i class="bi bi-card-heading"></i> Meal Name  </th>
+                                            <th><i class="bi bi-cart-check"></i> Price  </th>
+
+                                        </tr>
+
+                                        @foreach (var meal in menu.Meals)
+                                        {
+                                            <tr>
+                                                <td><img src="~/Restaurant_@restaurant.Id/@meal.ImageUrl" width="70px" height="40px" /> </td> <!--Sooon-->
+
+                                                <td>@meal.Name </td>
+                                                <td>@meal.Price.ToString("c") </td>
+
+                                            </tr>
+
+                                        }
+                                    </table>
+                                    <!--Add Controller to  Do  This Link Action Which will do to Book And Show Meals in 
+                                        Menu ?????????????     Soooooooooooooon
+                                    -->
+                                    <a class="btn btn-outline-primary fs-5 fw-bold " asp-action="ViewMenu" asp-route-MenuId="@menu.Id"> <i class="bi bi-arrow-right-circle-fill"></i> Click To Show All Meals And Offers <i class="bi bi-gift-fill"></i> </a>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+               
+                }
+            </div>
+
+        </div>
+     }
+
+ </div>
+
+

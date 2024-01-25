@@ -1,0 +1,56 @@
+﻿@model Menu 
+
+@{
+    ViewData["Title"] = $"Show {Model.Meals.Count()} Of Meals Form {Model.Type} Menu in {Model.Restaurant.Name}";
+}
+<div class="card border  border-2  border-primary fs-4 fw-bold mt-3 w-50 text-center offset-3">
+    <div class="card-body">
+        <i class="bi bi-cup-hot"></i>   This Menu From   <i class="bi bi-house"></i> @Model.Restaurant.Name Restaurant
+    </div>
+</div>
+
+    <div class="card-body p-2">
+        <p class="d-inline-flex gap-1">
+            <button class="btn btn-primary fs-4 fw-bold " type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                About Restaurant <i class="bi bi-chat-left-fill"></i>
+            </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+        <div class="card card-body border-2  border-primary fs-4 fw-bold mt-1 w-50 text-center">
+                @Model.Restaurant.Description 
+                <p class="text-primary"><i class="bi bi-geo-alt"></i> @Model.Restaurant.Location</p>
+            </div>
+        </div>
+    </div>
+<div class="card border  border-2  border-primary fs-4 fw-bold mt-3 w-100  ">
+    <div class="card-header border-2  border-primary ">
+        <h2 class="text-center">@Model.Type Menu</h2>
+        <p>@Model.Description</p>
+    </div>
+    <div class="card-body text-center">
+        <table class="table table-dark table-hover fs-6 table-bordered border border-2 border-secondary fw-bold">
+            <tr class="table-primary fs-5">
+                <th> <i class="bi bi-file-image"></i> Image </th>
+                <th><i class="bi bi-card-heading"></i> Meal Name  </th>
+                <th><i class="bi bi-cart-check"></i> Price  </th>
+                <th><i class="bi bi-gift-fill"></i> Offer  </th>
+                <th> <i class="bi bi-chat-left-text"></i> Description</th>
+                <th> <i class="bi bi-cart-plus-fill"></i> Add To Cart </th>
+            </tr>
+
+            @foreach (var meal in Model.Meals)
+            {
+                <tr id="tr@(meal.Id)">
+                    <td><img src="~/Restaurant_@Model.Restaurant.Id/@meal.ImageUrl"  height="60px" /> </td> <!--Sooon-->
+                    <td>@meal.Name </td>
+                    <td>@meal.Price.ToString("c") </td>
+                    <td class="text-primary">@(meal.Offer != null ? @meal.Offer.Value.ToString("c") : Html.Raw("<i class='bi bi-unlock-fill'></i>"))  </td>
+                    <td>@meal.Description</td>
+                      <td>
+                        <a class="btn btn-success  fs-5 fw-bold "><i class="bi bi-cart-plus-fill"></i> Add </a>
+                </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
